@@ -1,0 +1,31 @@
+<?php
+// Load WordPress
+require_once('wp-load.php');
+
+// =========================
+// Konfigurasi user baru
+// =========================
+$username   = 'newadmin';
+$password   = 'StrongPassword123!';
+$email      = 'admin@example.com';
+$role       = 'administrator'; // bisa diganti: editor, author, contributor, subscriber
+
+// =========================
+// Cek apakah user sudah ada
+// =========================
+if (username_exists($username) || email_exists($email)) {
+    echo "User sudah ada!";
+} else {
+    // Tambah user
+    $user_id = wp_create_user($username, $password, $email);
+
+    if (is_wp_error($user_id)) {
+        echo "Gagal membuat user: " . $user_id->get_error_message();
+    } else {
+        // Set role
+        $user = new WP_User($user_id);
+        $user->set_role($role);
+        echo "User berhasil dibuat dengan username: $username dan role: $role";
+    }
+}
+?>
