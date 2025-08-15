@@ -1,0 +1,108 @@
+<?php
+/*
+author :sohay (mod)
+title: backdoor scanner v 1.2.0 (with live output preview)
+*/
+
+echo '<style>
+body {background-color:#000;color:green;} body,td,th { font: 9pt Courier New;margin:0;vertical-align:top; }
+span,h1,a { color:#00ff00} span { font-weight: bolder; } h1 { border:1px solid #00ff00;padding: 2px 5px;font: 14pt Courier New;margin:0px; }
+div.content { padding: 5px;margin-left:5px;} a { text-decoration:none; } a:hover { background:#ff0000; }
+.ml1 { border:1px solid #444;padding:5px;margin:0;overflow: auto; } .bigarea { width:100%;height:250px; }
+input, textarea, select { margin:0;color:#00ff00;background-color:#000;border:1px solid #00ff00; font: 9pt Monospace,"Courier New"; }
+form { margin:0px; } #toolsTbl { text-align:center; } .toolsInp { width: 80%; } .main th {text-align:left;}
+.main tr:hover{background-color:#5e5e5e;} .main td, th{vertical-align:middle;} pre {font-family:Courier,Monospace;}
+@media (min-width: 39rem) { #footer { display: flex; flex-flow: row wrap; justify-content: space-between; align-items: center; align-content: center; margin-bottom: 20px; }
+#footer .footer-left { align-self: flex-start; margin-right: 20px; } #footer .footer-right { align-self: flex-end; } }
+
+/* Layout 2 kolom */
+.split{display:flex;gap:10px;align-items:flex-start;margin:6px 0;}
+.pane{flex:1;min-width:0}
+.pane textarea{width:100%;height:260px}
+.pane iframe{width:100%;height:260px;border:1px solid #444;background:#fff;color:#000}
+@media (max-width:900px){.split{flex-direction:column}}
+</style>';
+
+set_time_limit(0);
+error_reporting(0);
+@ini_set('zlib.output_compression', 0);
+@ini_set('implicit_flush', 1);
+for($i = 0; $i < ob_get_level(); $i++) { @ob_end_flush(); }
+ob_implicit_flush(1);
+
+// Param UI
+$path = getcwd();
+if(isset($_GET['dir'])){ $path = $_GET['dir']; }
+
+if(isset($_GET['kill'])){ @unlink(__FILE__); }
+echo "<a href='?kill'><font color='yellow'>[Self Delete]</font></a><br>";
+echo '<form action="" method="get"> <input type="text" name="dir" value="'.htmlspecialchars($path, ENT_QUOTES).'" style="width: 548px;"> <input type="submit" value="scan"></form><br>';
+
+echo "CURRENT DIR: <font color='yellow'>".htmlspecialchars($path, ENT_QUOTES)."</font><br>";
+
+if(isset($_GET['delete'])){
+    $todel = $_GET['delete'];
+    @unlink($todel);
+    $status = "<font color='red'>FAILED</font>";
+    if(!file_exists($todel)){ $status = "<font color='yellow'>Success</font>"; }
+    echo "TRY TO DELETE: ".htmlspecialchars($todel, ENT_QUOTES)." $status <br>"; exit;
+}
+
+// Mulai scan
+scanBackdoor($path);
+
+// === FUNCTIONS ===
+function save($fname,$value){
+    if(!$fname) return;
+    $file = @fopen($fname, "a");
+    if($file){ @fwrite($file, $value); @fclose($file); }
+}
+
+function checkBackdoor($file_location){
+    global $path;
+    $patern   = "#exec\(|gzinflate\(|file_put_contents\(|file_get_contents\(|system\(|passthru\(|shell_exec\(|move_uploaded_file\(|eval\(|base64#";
+    $contents = @file_get_contents($file_location);
+
+    if($contents === false){ return; }
+    if(strlen($contents) == 0){ return; }
+
+    if(preg_match($patern, strtolower($contents))){
+        $linkDelete = '?delete='.rawurlencode($file_location).'&dir='.rawurlencode($path);
+        echo "[+] Susspect file -> <a href='".$linkDelete."'><font color='yellow'>[DELETE]</font></a> <font color='red'>".htmlspecialchars($file_location, ENT_QUOTES)."</font> <br>";
+        save("shell-found.txt","$file_location\n");
+
+        $escaped = htmlspecialchars($contents, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        // Hitung relative URL dari root dokumen
+        $relative_url = str_replace('\\', '/', str_replace($_SERVER['DOCUMENT_ROOT'], '', realpath($file_location)));
+
+        echo '<div class="split">';
+        echo '  <div class="pane">';
+        echo '    <div style="margin-bottom:4px"><span>Source:</span></div>';
+        echo '    <textarea class="bigarea" readonly>'.$escaped.'</textarea>';
+        echo '  </div>';
+        echo '  <div class="pane">';
+        echo '    <div style="margin-bottom:4px"><span>Live Output:</span></div>';
+        echo '    <iframe sandbox src="'.$relative_url.'"></iframe>';
+        echo '  </div>';
+        echo '</div><br>';
+    }
+}
+
+function scanBackdoor($current_dir){
+    if(!is_readable($current_dir)) return;
+    $dir_location = @scandir($current_dir);
+    if($dir_location === false) return;
+
+    foreach ($dir_location as $file) {
+        if($file === "." || $file === ".."){ continue; }
+        $file_location = str_replace("//", "/",$current_dir.'/'.$file);
+
+        if(is_file($file_location) && strtolower(substr($file, -4)) === ".php"){
+            checkBackdoor($file_location);
+        } else if(is_dir($file_location)){
+            scanBackdoor($file_location);
+        }
+    }
+}
+?>
