@@ -1,3 +1,14 @@
 <?php
-echo shell_exec("ssh user@server 'ls -la'");
-?>
+require '/var/lock/phpseclib/phpseclib/bootstrap.php';
+
+use phpseclib3\Net\SSH2;
+
+$ssh = new SSH2('66.94.102.242');   // pakai IP langsung
+
+if (!$ssh->login('fgu', 'fgu')) { 
+    exit("Login gagal\n");
+}
+
+echo "<pre>";
+echo $ssh->exec('ls -la');   // contoh perintah di server target
+echo "</pre>";
