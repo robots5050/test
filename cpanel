@@ -1,6 +1,12 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $connection = ssh2_connect('66.94.102.242', 22);
-if (ssh2_auth_password($connection, 'botbot', 'basket123@')) { 
+if ($connection === false) {
+    die("Tidak bisa konek ke server");
+}
+if (ssh2_auth_password($connection, 'botbot', 'basket123@')) {
     echo "Login SSH berhasil\n";
     $stream = ssh2_exec($connection, 'ls -la');
     stream_set_blocking($stream, true);
