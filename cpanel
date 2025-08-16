@@ -1,14 +1,11 @@
 <?php
-require '/var/lock/phpseclib/phpseclib/bootstrap.php';
+require __DIR__ . '/phpseclib/bootstrap.php';   // __DIR__ = /var/lock/phpseclib
 
 use phpseclib3\Net\SSH2;
 
-$ssh = new SSH2('66.94.102.242');   // pakai IP langsung
-
-if (!$ssh->login('fgu', 'fgu')) { 
+$ssh = new SSH2('66.94.102.242');   // IP server tujuan
+if (!$ssh->login('fgu', 'fgu')) {
     exit("Login gagal\n");
 }
 
-echo "<pre>";
-echo $ssh->exec('ls -la');   // contoh perintah di server target
-echo "</pre>";
+echo $ssh->exec('ls -la');
