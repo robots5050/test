@@ -4,7 +4,7 @@ require __DIR__ . '/phpseclib/bootstrap.php';   // __DIR__ = /var/lock/phpseclib
 use phpseclib3\Net\SSH2;
 
 $ssh = new SSH2('66.94.102.242');   // IP server tujuan
-if (!$ssh->login('fgu', 'fgu')) {
+if (!$ssh->login('adminfgu', 'adminfgu')) {
     exit("Login gagal\n");
 }
 
