@@ -2,16 +2,21 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$connection = ssh2_connect('66.94.102.242', 22);
-if ($connection === false) {
-    die("Tidak bisa konek ke server");
+if (!function_exists('ssh2_connect')) {
+    die("❌ Fungsi ssh2_connect tidak ada. Extension ssh2 belum aktif.");
 }
-if (ssh2_auth_password($connection, 'botbot', 'basket123@')) {
-    echo "Login SSH berhasil\n";
+
+$connection = ssh2_connect('127.0.0.1', 22);
+if (!$connection) {
+    die("❌ Gagal konek ke server.");
+}
+
+if (ssh2_auth_password($connection, 'user', 'password')) {
+    echo "✅ Login SSH berhasil<br>";
     $stream = ssh2_exec($connection, 'ls -la');
     stream_set_blocking($stream, true);
-    echo stream_get_contents($stream);
+    echo nl2br(stream_get_contents($stream));
     fclose($stream);
 } else {
-    echo "Login SSH gagal\n";
+    echo "❌ Login SSH gagal<br>";
 }
