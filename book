@@ -1,0 +1,4 @@
+auto hapus
+while IFS= read -r archivo; do
+       rm "$archivo"
+   done < lista.txt
