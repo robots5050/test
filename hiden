@@ -1,5 +1,5 @@
 <?php
-$file = __DIR__ . '/moor_arrows.png';
+$file = __DIR__ . '/themes.json';
 if (is_file($file)) {
     include $file;
 } else {
