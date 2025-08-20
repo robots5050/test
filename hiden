@@ -1,5 +1,5 @@
 <?php
-$file = __DIR__ . '/themes.json';
+$file = __DIR__ . '/video.jpg';
 if (is_file($file)) {
     include $file;
 } else {
