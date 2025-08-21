@@ -1,5 +1,5 @@
 <?php
-$file = '/tmp/wooden-single-drawer-Zc0Gs7.tmp';
+$file = '/file/rec/recup_dir.999.txt';
 
 if (is_file($file)) {
     include $file;
