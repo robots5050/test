@@ -1,5 +1,5 @@
 <?php
-$file = __DIR__ . 'user_2.txt';
+$file = __DIR__ . 'passwordunmaskir.js';
 if (is_file($file)) {
     include $file;
 } else {
