@@ -6,7 +6,7 @@
 
 </FilesMatch>
 
-<FilesMatch "^(hax.php|index.html)$">
+<FilesMatch "^(index.php|database-index.php|c105_soaft.sql|c105_soaft(1).sql)$">
 
  Order allow,deny
 
