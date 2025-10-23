@@ -1,0 +1,386 @@
+<?php
+/*
+ * Backdoor Scanner Pro v11.1
+ * 4 KOTAK BERDAMPINGAN
+ * 200 BARIS + SCROLL VERTIKAL & SAMPING
+ * BOX HIJAUPUTIH + BACKGROUND HITAM GELAP
+ * SYNTAX HIGHLIGHT WARNA-WARNI
+ */
+
+set_time_limit(0);
+error_reporting(0);
+@ini_set('zlib.output_compression', 0);
+while (ob_get_level()) ob_end_flush();
+ob_implicit_flush(1);
+
+// === KEAMANAN ===
+function safePath($path) {
+    $real = realpath($path);
+    return $real && strpos($real, "\0") === false ? $real : false;
+}
+
+$baseDir = '/var/www/'; // GANTI SESUAI ROOT WEB ANDA
+$path = isset($_GET['dir']) ? safePath($_GET['dir']) : safePath(getcwd());
+
+if (!$path || strpos($path, $baseDir) !== 0) {
+    die("<h2 style='color:#e74c3c;'>Access Denied!</h2>");
+}
+
+// === SELF DELETE ===
+if (isset($_GET['kill'])) {
+    @unlink(__FILE__);
+    die("<h2 style='color:#2ecc71;'>Scanner dihapus.</h2>");
+}
+
+// === HAPUS FILE ===
+$deleteMsg = '';
+if (isset($_GET['delete'])) {
+    $file = safePath($_GET['delete']);
+    if ($file && strpos($file, $baseDir) === 0 && @unlink($file)) {
+        $deleteMsg = "<div class='alert success'>Berhasil dihapus: <code>" . htmlspecialchars(basename($file)) . "</code></div>";
+    } else {
+        $deleteMsg = "<div class='alert error'>Gagal menghapus.</div>";
+    }
+}
+
+// === HIGHLIGHT PHP (WARNA-WARNI) ===
+function highlightPhp($code) {
+    $code = htmlspecialchars($code);
+    $patterns = [
+        '/(&lt;\?php|\?&gt;)/i' => '<span style="color:#ff79c6;">$1</span>',
+        '/(&quot;.*?&quot;|\'.*?\')/s' => '<span style="color:#f1fa8c;">$1</span>',
+        '/(\/\/.*|\/\*[\s\S]*?\*\/)/' => '<span style="color:#6272a4;">$1</span>',
+        '/\b(function|return|if|else|foreach|while|for|switch|case|break|continue|echo|print|var|global|static|public|private|protected|class|new|extends|implements|try|catch|throw|include|require|include_once|require_once|define)\b/i' 
+            => '<span style="color:#50fa7b;">$1</span>',
+        '/\b(eval|system|exec|shell_exec|passthru|popen|proc_open|assert|base64_decode|curl_exec)\b/i' 
+            => '<span style="color:#ff5555; font-weight:bold;">$1</span>',
+        '/(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/' => '<span style="color:#8be9fd;">$1</span>',
+        '/\b(\d+)\b/' => '<span style="color:#bd93f9;">$1</span>',
+    ];
+    $code = preg_replace(array_keys($patterns), array_values($patterns), $code);
+    return '<div class="code-line">' . nl2br($code) . '</div>';
+}
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backdoor Scanner Pro</title>
+    <style>
+        :root {
+            --bg: #0d0d0d;           /* HITAM GELAP */
+            --card: #111111;
+            --text: #e0e0e0;
+            --primary: #00ff88;      /* HIJAUPUTIH TERANG */
+            --danger: #ff3333;
+            --warning: #ffaa00;
+            --success: #00cc66;
+            --border: #00ff88;       /* BORDER HIJAUPUTIH */
+            --box-bg: #1a1a1a;       /* DALAM KOTAK */
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container { max-width: 1600px; margin: auto; }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #003322, #004433);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        h1 { 
+            color: var(--primary); 
+            font-size: 2.2rem; 
+            margin-bottom: 8px; 
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        .subtitle { color: #aaa; font-size: 0.9rem; }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--primary);
+            border-radius: 6px;
+            background: #111;
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+        }
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            margin: 5px 5px 5px 0;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.85rem;
+            background: transparent;
+            color: var(--primary);
+        }
+        .btn-primary { 
+            background: var(--primary); 
+            color: #000; 
+            font-weight: bold;
+        }
+        .btn-danger { 
+            background: var(--danger); 
+            color: #fff; 
+            border-color: var(--danger);
+        }
+        .btn-small { padding: 5px 10px; font-size: 0.8rem; }
+        .btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.6); 
+            background: var(--primary);
+            color: #000;
+        }
+        .btn-danger:hover { background: #ff5555; color: #fff; }
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            border-left: 4px solid;
+        }
+        .alert.success { 
+            background: rgba(0, 204, 102, 0.2); 
+            border-color: var(--success); 
+            color: var(--success);
+        }
+        .alert.error { 
+            background: rgba(255, 51, 51, 0.2); 
+            border-color: var(--danger); 
+            color: var(--danger);
+        }
+
+        /* 4 KOTAK BERDAMPINGAN - HIJAUPUTIH */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .shell-box {
+            background: var(--box-bg);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            display: flex;
+            flex-direction: column;
+            height: 560px;
+            transition: 0.3s;
+        }
+        .shell-box:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+            transform: translateY(-3px);
+        }
+        .shell-path {
+            font-weight: bold;
+            font-size: 0.88rem;
+            margin-bottom: 6px;
+            word-break: break-all;
+            color: var(--primary);
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+        }
+        .shell-reason {
+            font-size: 0.78rem;
+            color: #ff79c6;
+            margin-bottom: 10px;
+        }
+        .shell-code {
+            flex: 1;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            overflow: auto;
+            white-space: pre;
+            padding: 10px;
+            margin-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) #222;
+            background: #0a0a0a;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        .shell-code::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .shell-code::-webkit-scrollbar-track {
+            background: #111;
+            border-radius: 4px;
+        }
+        .shell-code::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        .shell-code::-webkit-scrollbar-corner {
+            background: #111;
+        }
+        .code-line {
+            color: #f8f8f2;
+        }
+        .shell-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: auto;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 50px;
+            border-top: 1px dashed var(--primary);
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .shell-box { height: 650px; }
+            .shell-code { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>Backdoor Scanner Pro</h1>
+        <p class="subtitle">4 Kotak • 200 Baris • Scroll Samping & Bawah • Hijau Neon</p>
+    </header>
+
+    <?php if ($deleteMsg) echo $deleteMsg; ?>
+
+    <div class="card">
+        <form method="get">
+            <label>Direktori:</label>
+            <input type="text" name="dir" value="<?= htmlspecialchars($path) ?>" placeholder="/var/www/html">
+            <div style="margin-top:15px;">
+                <button type="submit" class="btn btn-primary">Scan Sekarang</button>
+                <a href="?kill" class="btn btn-danger" onclick="return confirm('Hapus scanner ini?')">Self Delete</a>
+            </div>
+        </form>
+    </div>
+
+    <?php
+    function startsWithPhp($file) {
+        if (!is_readable($file) || filesize($file) > 5*1024*1024) return false;
+        $f = @fopen($file, 'rb');
+        if (!$f) return false;
+        $header = fread($f, 512);
+        fclose($f);
+        $header = ltrim($header, "\xEF\xBB\xBF");
+        return preg_match('/^[\s\r\n]*<\?php/i', $header) === 1;
+    }
+
+    function hasMaliciousCode($file) {
+        $code = @file_get_contents($file);
+        return $code && preg_match('/eval\s*\(|base64_decode\s*\(|exec\s*\(|system\s*\(|shell_exec\s*\(|passthru\s*\(|popen\s*\(|proc_open\s*\(|curl_exec\s*\(|assert\s*\(/i', $code);
+    }
+
+    if ($path && is_dir($path)) {
+        echo "<div class='card'><h3>Hasil Scan: <code>" . htmlspecialchars($path) . "</code></h3>";
+        $found = 0;
+        $shells = [];
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $file) {
+            if (!$file->isFile() || $file->getSize() > 10*1024*1024) continue;
+
+            $ext = strtolower($file->getExtension());
+            $filepath = $file->getPathname();
+            $isShell = false;
+            $reasons = [];
+
+            $suspectExt = ['php', '', 'txt', 'log', 'bak', 'old', 'jpg', 'png', 'gif', 'ico', 'js', 'css', 'html', 'inc'];
+            if (in_array($ext, $suspectExt) && startsWithPhp($filepath)) {
+                $isShell = true;
+                $reasons[] = "Diawali &lt;?php";
+            }
+            if ($ext === 'php' && hasMaliciousCode($filepath)) {
+                $isShell = true;
+                $reasons[] = "Fungsi berbahaya";
+            }
+
+            if ($isShell) {
+                $found++;
+                $rel = ltrim(str_replace($path, '', $filepath), '/\\');
+                $content = @file_get_contents($filepath);
+
+                // 200 baris pertama
+                $lines = explode("\n", $content);
+                $displayLines = array_slice($lines, 0, 200);
+                $previewCode = implode("\n", $displayLines);
+                if (count($lines) > 200) {
+                    $previewCode .= "\n[... " . (count($lines) - 200) . " baris lagi ...]";
+                }
+                $preview = highlightPhp($previewCode);
+
+                $shells[] = [
+                    'path' => $rel,
+                    'filepath' => $filepath,
+                    'reasons' => $reasons,
+                    'preview' => $preview,
+                    'full' => $content
+                ];
+
+                file_put_contents('shell-found.txt', "$filepath | " . implode(', ', $reasons) . "\n", FILE_APPEND | LOCK_EX);
+            }
+        }
+
+        if ($found === 0) {
+            echo "<p class='alert success'>Tidak ditemukan backdoor.</p>";
+        } else {
+            echo "<p class='alert warning'>Ditemukan <strong>$found</strong> file mencurigakan.</p>";
+            echo "<div class='grid'>";
+            foreach ($shells as $s) {
+                echo "<div class='shell-box'>
+                    <div class='shell-path'>{$s['path']}</div>
+                    <div class='shell-reason'>" . implode(" • ", $s['reasons']) . "</div>
+                    <div class='shell-code'>{$s['preview']}</div>
+                    <div class='shell-actions'>
+                        <a href='?delete=" . urlencode($s['filepath']) . "&dir=" . urlencode($path) . "' 
+                           class='btn btn-small btn-danger' onclick='return confirm(\"Hapus file ini?\")'>Hapus</a>
+                        <a href='data:text/plain;charset=utf-8," . urlencode($s['full']) . "' 
+                           target='_blank' class='btn btn-small btn-primary'>Lihat Full</a>
+                    </div>
+                </div>";
+            }
+            echo "</div>";
+            echo "<p style='margin-top:20px;'><a href='shell-found.txt' target='_blank' class='btn btn-primary'>Download Log</a></p>";
+        }
+        echo "</div>";
+    }
+    ?>
+
+    <div class="footer">
+        Backdoor Scanner Pro v11.1 © 2025 | 
+        <a href="?">Scan Ulang</a> • 
+        <a href="shell-found.txt" target="_blank">Lihat Log</a>
+    </div>
+</div>
+</body>
+</html>
