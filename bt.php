@@ -1,4 +1,3 @@
-%PDF-
 <?php
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('error_log',NULL);
